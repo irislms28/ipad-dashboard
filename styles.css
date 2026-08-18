@@ -1,0 +1,218 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+body {
+    background-color: #fff8f0;
+    color: #5c4b51;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.dashboard-container {
+    width: 100%;
+    max-width: 920px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* 時鐘與頂部卡片 */
+.clock-card {
+    background: #ffffff;
+    border-radius: 28px;
+    padding: 25px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 10px 20px rgba(235, 218, 207, 0.4);
+    border: 3px solid #fce1e4;
+}
+
+.time-display {
+    font-size: 5.2rem;
+    font-weight: 800;
+    color: #4a3e3d;
+    line-height: 1;
+    letter-spacing: 1px;
+}
+
+.date-display {
+    font-size: 1.4rem;
+    color: #8c7a6b;
+    margin-top: 12px;
+    font-weight: 600;
+}
+
+/* Chiikawa 靜態展示區 */
+.chiikawa-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #fff0f3;
+    padding: 12px 18px;
+    border-radius: 22px;
+    border: 2px dashed #ffb3c1;
+}
+
+.chiikawa-box img {
+    width: 95px;
+    height: 95px;
+    object-fit: contain;
+}
+
+.chiikawa-tip {
+    font-size: 0.78rem;
+    color: #ff758f;
+    margin-top: 6px;
+    font-weight: bold;
+}
+
+/* 網格版面 */
+.grid-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.card {
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 22px;
+    box-shadow: 0 8px 18px rgba(235, 218, 207, 0.3);
+    border: 2px solid #fbe4e8;
+}
+
+.card-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #6d597a;
+    margin-bottom: 14px;
+    border-bottom: 2.5px dashed #f2d5d8;
+    padding-bottom: 8px;
+}
+
+/* 天氣部分 */
+.weather-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin: 15px 0;
+}
+
+.weather-icon {
+    width: 60px;
+    height: 60px;
+}
+
+.temp-display {
+    font-size: 3.8rem;
+    font-weight: 800;
+    color: #e07a5f;
+}
+
+.warning-box {
+    font-size: 0.9rem;
+    color: #8c7a6b;
+    background: #fff8f0;
+    padding: 10px 14px;
+    border-radius: 14px;
+    border: 1.5px solid #f4acb7;
+    text-align: center;
+    font-weight: 600;
+}
+
+/* 交通列表項 */
+.mtr-routes, .bus-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.route-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff5f5;
+    padding: 12px 14px;
+    border-radius: 14px;
+    font-weight: 600;
+    border: 1px solid #ffe5ec;
+}
+
+.direction {
+    color: #5c4b51;
+}
+
+.eta-time {
+    color: #3d5a80;
+    font-weight: 700;
+}
+
+.bus-title {
+    margin-top: 18px;
+}
+
+/* 備忘板樣式 */
+.memo-card {
+    grid-column: span 2;
+    display: flex;
+    flex-direction: column;
+}
+
+.memo-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.memo-title {
+    margin-bottom: 0;
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.memo-status {
+    font-size: 0.8rem;
+    color: #b5e2fa;
+    background: #e8f1f5;
+    padding: 3px 10px;
+    border-radius: 10px;
+    font-weight: 600;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.memo-status.visible {
+    opacity: 1;
+    color: #2a9d8f;
+    background: #e0f2fe;
+}
+
+.memo-textarea {
+    width: 100%;
+    height: 90px;
+    margin-top: 12px;
+    padding: 12px 14px;
+    border-radius: 16px;
+    border: 2px solid #f2d5d8;
+    background-color: #fffaf0;
+    color: #5c4b51;
+    font-size: 1rem;
+    line-height: 1.5;
+    resize: none;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.memo-textarea:focus {
+    border-color: #f4acb7;
+    background-color: #ffffff;
+}
