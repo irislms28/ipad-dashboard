@@ -53,6 +53,7 @@
   </div>
 
   <div class="grid-container">
+    <!-- 天氣區域 -->
     <div class="card">
       <div class="card-title">☀️ 太古即時天氣</div>
       <div class="weather-main">
@@ -62,9 +63,11 @@
       <div class="weather-desc" id="weather-desc">加載中...</div>
     </div>
 
+    <!-- 到站時間區域 -->
     <div class="card">
       <div class="card-title">🚌 實時到站時間</div>
       
+      <!-- 港鐵 MTR API -->
       <div class="eta-box" style="border-left-color: #0072ce;">
         <div class="route-header">
           <span class="route-badge" style="background: #0072ce;">港島綫</span>
@@ -74,6 +77,7 @@
         <div class="next-bus" id="mtr-next">下班車：--</div>
       </div>
 
+      <!-- 城巴 CTB API -->
       <div class="eta-box" style="border-left-color: #e63946;">
         <div class="route-header">
           <span class="route-badge" style="background: #e63946;">33X</span>
@@ -86,6 +90,7 @@
   </div>
 
   <script>
+    // 1. 時間更新
     function updateClock() {
       const now = new Date();
       document.getElementById('clock').innerText = now.toTimeString().split(' ')[0];
@@ -95,12 +100,13 @@
     setInterval(updateClock, 1000);
     updateClock();
 
-    // 解決 iOS Safari 日期解析問題
-    function parseDate(dateStr) {
+    // 格式化日期，避免 iOS/Safari 遇到 Invalid Date
+    function parseCustomDate(dateStr) {
       if (!dateStr) return null;
       return new Date(dateStr.replace(/-/g, '/').replace('T', ' '));
     }
 
+    // 2. 香港天文台 Weather API
     async function getWeather() {
       try {
         const res = await fetch('https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=rhrread&lang=tc');
@@ -111,7 +117,6 @@
         
         if (data.icon && data.icon.length > 0) {
           const iconCode = data.icon[0];
-          // 天文台官方圖示 CDN
           document.getElementById('weather-icon').innerHTML = `<img src="https://www.hko.gov.hk/images/HKOWeatherIcon/pic${iconCode}.png" alt="weather">`;
         }
         document.getElementById('weather-desc').innerText = `位置：鰂魚涌 / 太古`;
@@ -120,22 +125,23 @@
       }
     }
 
+    // 3. MTR API 官方接口: rt.data.gov.hk/v1/transport/mtr/getSchedule.php
     async function getMTRETA() {
       try {
         const res = await fetch('https://rt.data.gov.hk/v1/transport/mtr/getSchedule.php?line=ISL&sta=TAK');
         const data = await res.json();
         
-        if (data.status === 1 && data.data['ISL-TAK'] && data.data['ISL-TAK'].W) {
+        if (data.status === 1 && data.data && data.data['ISL-TAK'] && data.data['ISL-TAK'].W) {
           const list = data.data['ISL-TAK'].W;
           if (list.length > 0) {
             const now = new Date();
-            const firstTrain = parseDate(list[0].time);
+            const firstTrain = parseCustomDate(list[0].time);
             const diffMin = Math.max(0, Math.floor((firstTrain - now) / 60000));
             
             document.getElementById('mtr-eta').innerHTML = `${diffMin} <span class="eta-unit">分鐘</span>`;
             
             if (list[1]) {
-              const secondTrain = parseDate(list[1].time);
+              const secondTrain = parseCustomDate(list[1].time);
               const nextMin = Math.max(0, Math.floor((secondTrain - now) / 60000));
               document.getElementById('mtr-next').innerText = `下一班：${nextMin} 分鐘`;
             }
@@ -148,22 +154,24 @@
       }
     }
 
+    // 4. 城巴 CTB API 官方接口: rt.data.gov.hk/v2/transport/citybus/eta/CTB/001322/33X
     async function getBusETA() {
       try {
         const res = await fetch('https://rt.data.gov.hk/v2/transport/citybus/eta/CTB/001322/33X');
         const data = await res.json();
         
         if (data.data && data.data.length > 0) {
+          // 過濾有效班次
           const list = data.data.filter(item => item.eta && item.eta !== "");
           if (list.length > 0) {
             const now = new Date();
-            const firstBus = parseDate(list[0].eta);
+            const firstBus = parseCustomDate(list[0].eta);
             const diffMin = Math.max(0, Math.floor((firstBus - now) / 60000));
             
             document.getElementById('bus-eta').innerHTML = `${diffMin} <span class="eta-unit">分鐘</span>`;
             
             if (list[1]) {
-              const secondBus = parseDate(list[1].eta);
+              const secondBus = parseCustomDate(list[1].eta);
               const nextMin = Math.max(0, Math.floor((secondBus - now) / 60000));
               document.getElementById('bus-next').innerText = `下一班：${nextMin} 分鐘`;
             }
@@ -187,7 +195,7 @@
     }
 
     fetchAllData();
-    setInterval(fetchAllData, 30000);
+    setInterval(fetchAllData, 30000); // 30 秒自動刷新
   </script>
 </body>
 </html>
